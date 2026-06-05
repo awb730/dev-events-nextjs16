@@ -15,14 +15,13 @@ export async function POST(req: NextRequest) {
         try {
             event = Object.fromEntries(formData.entries());
         } catch (e) {
-            console.error(e);
             return NextResponse.json({ message: 'Invalid JSON data format'}, { status: 400 })
         }
 
         const file = formData.get('image') as File;
 
         if(!file) return NextResponse.json({ message: 'Image file is required'}, { status: 400 })
-        
+
         const tags = JSON.parse(formData.get('tags') as string);
         const agenda = JSON.parse(formData.get('agenda') as string);
 
@@ -56,7 +55,7 @@ export async function GET() {
     try {
         await connectDB();
 
-        const events = await Event.find().sort({ createdAt: -1 }).lean();
+        const events = await Event.find().sort({ createdAt: -1 });
 
         return NextResponse.json({ message: 'Events fetched successfully', events }, { status: 200 });
     } catch (e) {
